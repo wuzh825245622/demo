@@ -1,0 +1,13 @@
+version: "3.0"
+
+services:
+  demo: #服务名
+    image: demo:1.3
+    ports:
+     - 8087:8080
+
+  demo2: #服务名
+    image: demo:1.3
+    ports:
+      - 8086:8080
+    command: "ls"

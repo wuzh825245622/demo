@@ -1,0 +1,76 @@
+version: "3.0"
+services:
+  demo:
+    build:
+      context: /app2
+      dockerfile: Dockerfile
+    container_name: demo
+    ports:
+      - "8082:8080"
+    networks:
+      - hello
+    depends_on:
+      - tomcat01
+
+  tomcat01: #服务名
+    container_name: tomcat01 #相当于run --name
+    image: docker.io/tomcat:latest #使用的镜像  run image
+    ports: #宿主机和容器的映射端口 run -p
+      - "8092:8080"
+    volumes: #宿主机与容器目录卷共享 run -v
+      - tomcatwebapps01:/usr/local/tomcat/webapps
+    networks: #定义当前服务用哪个网络桥 run --network
+      - hello
+    depends_on: #代表这个容器必须依赖那些容器启动后才能启动（其他容器启动差不多了就会启动tomcat01）
+      - tomcat02
+      - mysql
+    healthcheck: #心跳检测
+      test: ["CMD", "curl", "-f", "http://localhost"]
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+#      start_period: 40s
+#    sysctls: #配置容器内核参数
+#      net.core.somaxconn: 1024
+#      net.ipv4.tcp_syncookies: 0
+    ulimits: #资源限制，最大进程数之类的
+      nproc: 65535  #最大进程数
+      nofile:       #最大文件打开书
+        soft: 20000   #警告的设定
+        hard: 40000   #严格的设定
+
+  tomcat02: #服务名
+    container_name: tomcat02
+    image: docker.io/tomcat:latest #使用的镜像
+    ports: #宿主机和容器的映射端口
+      - "8093:8080"
+    volumes: #宿主机与容器目录卷共享
+      - tomcatwebapps02:/usr/local/tomcat/webapps
+    networks: #定义当前服务用哪个网络桥
+      - hello
+
+  mysql: #服务名
+    container_name: mysql
+    image: docker.io/mysql:latest #使用的镜像
+    ports: #宿主机和容器的映射端口
+      - "3307:3306"
+    volumes: #宿主机与容器目录卷共享
+      - mysqldata:/var/lib/mysql
+      - mysqlconf:/etc/mysql
+    #environment:
+    #  - MYSQL_ROOT_PASSWORD=root
+    env_file: #替代environment
+      - ./mysql.env
+    networks: #定义当前服务用哪个网络桥
+      - hello
+
+volumes: #声明上面需要自动创建的卷名
+  tomcatwebapps01: #自动创建的卷名
+    external: #使用外部卷名 需要先在服务器创建卷名：docker create tomcatwebapps
+      false
+  tomcatwebapps02: #自动创建的卷名
+  mysqldata:
+  mysqlconf:
+
+networks:
+  hello:
