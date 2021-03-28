@@ -4,10 +4,10 @@ WORKDIR /test/springboot
 #将本地文件夹挂载到当前容器
 VOLUME /log
 #复制文件到容器
-COPY demo-0.0.1-SNAPSHOT.jar /test/springboot/app1.jar
+
 COPY demo-0.0.2-SNAPSHOT.jar /test/springboot/app2.jar
 #声明需要暴露的接口
 EXPOSE 8080
 #配置容器启动后执行的命令
 ENTRYPOINT ["java","-jar"]
-CMD ["/app1.jar"]
+CMD ["/app2.jar"]
