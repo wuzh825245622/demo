@@ -2,6 +2,7 @@ version: "3.0"
 
 services:
   demo: #服务名
+    container_name: springboot01
     image: demo:1.3
     ports:
      - 8087:8080
