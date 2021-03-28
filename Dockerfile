@@ -10,4 +10,4 @@ COPY /target/demo-0.0.2-SNAPSHOT.jar /test/springboot/app2.jar
 EXPOSE 8080
 #配置容器启动后执行的命令
 ENTRYPOINT ["java","-jar"]
-CMD ["/app2.jar"]
+CMD ["/test/springboot/app2.jar"]
