@@ -5,7 +5,7 @@ WORKDIR /test/springboot
 VOLUME /log
 #复制文件到容器
 
-COPY demo-0.0.2-SNAPSHOT.jar /test/springboot/app2.jar
+COPY /target/demo-0.0.2-SNAPSHOT.jar /test/springboot/app2.jar
 #声明需要暴露的接口
 EXPOSE 8080
 #配置容器启动后执行的命令
