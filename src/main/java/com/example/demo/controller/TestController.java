@@ -15,7 +15,7 @@ public class TestController {
     @GetMapping("/test")
     public  String  test(){
         log.info("2222222222请求成功22222222！");
-        return "hello----20210329--";
+        return "hello----20210329--8989";
     }
 
 }
